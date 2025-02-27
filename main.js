@@ -1,13 +1,12 @@
-"use strict";
-class CookieSalesManager {
-    constructor() {
+var CookieSalesManager = /** @class */ (function () {
+    function CookieSalesManager() {
         this.cookieSales = [];
         this.PRICE_PER_PKG = 6.00;
         this.initializeCookieTypes();
         this.setupEventListeners();
     }
-    initializeCookieTypes() {
-        const cookieTypes = [
+    CookieSalesManager.prototype.initializeCookieTypes = function () {
+        var cookieTypes = [
             'Adventurefuls',
             'Lemon-Ups',
             'Trefoils',
@@ -18,7 +17,7 @@ class CookieSalesManager {
             'S\'mores',
             'Toffee-tastic',
         ];
-        this.cookieSales = cookieTypes.map(type => ({
+        this.cookieSales = cookieTypes.map(function (type) { return ({
             cookieType: type,
             startCases: 0,
             startPkgs: 0,
@@ -26,96 +25,92 @@ class CookieSalesManager {
             finishPkgs: 0,
             totalPkgsSold: 0,
             revenue: 0
-        }));
+        }); });
         this.renderTable();
-    }
-    setupEventListeners() {
-        const form = document.getElementById('cookieSalesForm');
-        form === null || form === void 0 ? void 0 : form.addEventListener('submit', (e) => {
+    };
+    CookieSalesManager.prototype.setupEventListeners = function () {
+        var _this = this;
+        var form = document.getElementById('cookieSalesForm');
+        form === null || form === void 0 ? void 0 : form.addEventListener('submit', function (e) {
             e.preventDefault();
-            this.saveChanges();
+            _this.saveChanges();
         });
-    }
-    renderTable() {
-        const tbody = document.getElementById('cookieSalesBody');
+    };
+    CookieSalesManager.prototype.renderTable = function () {
+        var tbody = document.getElementById('cookieSalesBody');
         if (!tbody)
             return;
         tbody.innerHTML = '';
-        this.cookieSales.forEach((sale, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><input type="text" value="${sale.cookieType}" readonly class="form-control" /></td>
-                <td><input type="number" value="${sale.startCases}" class="form-control" data-index="${index}" data-field="startCases" /></td>
-                <td><input type="number" value="${sale.startPkgs}" class="form-control" data-index="${index}" data-field="startPkgs" /></td>
-                <td><input type="number" value="${sale.finishCases}" class="form-control" data-index="${index}" data-field="finishCases" /></td>
-                <td><input type="number" value="${sale.finishPkgs}" class="form-control" data-index="${index}" data-field="finishPkgs" /></td>
-                <td><input type="number" value="${sale.totalPkgsSold}" readonly class="form-control" /></td>
-                <td><input type="number" value="${sale.revenue.toFixed(2)}" readonly class="form-control" /></td>
-            `;
+        this.cookieSales.forEach(function (sale, index) {
+            var row = document.createElement('tr');
+            row.innerHTML = "\n                <td><input type=\"text\" value=\"".concat(sale.cookieType, "\" readonly class=\"form-control\" /></td>\n                <td><input type=\"number\" value=\"").concat(sale.startCases, "\" class=\"form-control\" data-index=\"").concat(index, "\" data-field=\"startCases\" /></td>\n                <td><input type=\"number\" value=\"").concat(sale.startPkgs, "\" class=\"form-control\" data-index=\"").concat(index, "\" data-field=\"startPkgs\" /></td>\n                <td><input type=\"number\" value=\"").concat(sale.finishCases, "\" class=\"form-control\" data-index=\"").concat(index, "\" data-field=\"finishCases\" /></td>\n                <td><input type=\"number\" value=\"").concat(sale.finishPkgs, "\" class=\"form-control\" data-index=\"").concat(index, "\" data-field=\"finishPkgs\" /></td>\n                <td><input type=\"number\" value=\"").concat(sale.totalPkgsSold, "\" readonly class=\"form-control\" /></td>\n                <td><input type=\"number\" value=\"").concat(sale.revenue.toFixed(2), "\" readonly class=\"form-control\" /></td>\n            ");
             tbody.appendChild(row);
         });
         this.addInputListeners();
         this.updateTotals();
-    }
-    addInputListeners() {
-        const inputs = document.querySelectorAll('input[type="number"]:not([readonly])');
-        inputs.forEach(input => {
-            input.addEventListener('change', (e) => {
-                const target = e.target;
-                const index = parseInt(target.dataset.index || '0');
-                const field = target.dataset.field;
-                const value = parseInt(target.value) || 0;
-                if (this.cookieSales[index]) {
-                    this.cookieSales[index][field] = value;
+    };
+    CookieSalesManager.prototype.addInputListeners = function () {
+        var _this = this;
+        var inputs = document.querySelectorAll('input[type="number"]:not([readonly])');
+        inputs.forEach(function (input) {
+            input.addEventListener('change', function (e) {
+                var target = e.target;
+                var index = parseInt(target.dataset.index || '0');
+                var field = target.dataset.field;
+                var value = parseInt(target.value) || 0;
+                if (_this.cookieSales[index]) {
+                    _this.cookieSales[index][field] = value;
                     // Only calculate individual row total when finish packages are entered
                     if (field === 'finishPkgs') {
-                        this.calculateSales(index);
-                        this.updateRowTotal(index);
+                        _this.calculateSales(index);
+                        _this.updateRowTotal(index);
                     }
                 }
             });
         });
-    }
-    calculateSales(index) {
-        const sale = this.cookieSales[index];
-        const startTotal = (sale.startCases * 12) + sale.startPkgs;
-        const finishTotal = (sale.finishCases * 12) + sale.finishPkgs;
+    };
+    CookieSalesManager.prototype.calculateSales = function (index) {
+        var sale = this.cookieSales[index];
+        var startTotal = (sale.startCases * 12) + sale.startPkgs;
+        var finishTotal = (sale.finishCases * 12) + sale.finishPkgs;
         sale.totalPkgsSold = startTotal - finishTotal;
         sale.revenue = sale.totalPkgsSold * this.PRICE_PER_PKG;
-    }
-    updateRowTotal(index) {
-        const row = document.querySelector(`#cookieSalesBody tr:nth-child(${index + 1})`);
+    };
+    CookieSalesManager.prototype.updateRowTotal = function (index) {
+        var row = document.querySelector("#cookieSalesBody tr:nth-child(".concat(index + 1, ")"));
         if (row) {
             // Fix: Select inputs by their position in the row instead of by value
-            const totalPkgsInput = row.querySelectorAll('input')[5]; // 6th input (0-based index)
-            const revenueInput = row.querySelectorAll('input')[6]; // 7th input
+            var totalPkgsInput = row.querySelectorAll('input')[5]; // 6th input (0-based index)
+            var revenueInput = row.querySelectorAll('input')[6]; // 7th input
             if (totalPkgsInput)
                 totalPkgsInput.value = this.cookieSales[index].totalPkgsSold.toString();
             if (revenueInput)
                 revenueInput.value = this.cookieSales[index].revenue.toFixed(2);
         }
-    }
-    updateTotals() {
-        const totalPkgsSold = this.cookieSales.reduce((sum, sale) => sum + sale.totalPkgsSold, 0);
-        const totalRevenue = this.cookieSales.reduce((sum, sale) => sum + sale.revenue, 0);
-        const totalPkgsElement = document.getElementById('totalPkgsSold');
-        const totalRevenueElement = document.getElementById('totalRevenue');
+    };
+    CookieSalesManager.prototype.updateTotals = function () {
+        var totalPkgsSold = this.cookieSales.reduce(function (sum, sale) { return sum + sale.totalPkgsSold; }, 0);
+        var totalRevenue = this.cookieSales.reduce(function (sum, sale) { return sum + sale.revenue; }, 0);
+        var totalPkgsElement = document.getElementById('totalPkgsSold');
+        var totalRevenueElement = document.getElementById('totalRevenue');
         if (totalPkgsElement)
             totalPkgsElement.textContent = totalPkgsSold.toString();
         if (totalRevenueElement)
             totalRevenueElement.textContent = totalRevenue.toFixed(2);
-    }
-    saveChanges() {
+    };
+    CookieSalesManager.prototype.saveChanges = function () {
+        var _this = this;
         // Calculate totals for all rows
-        this.cookieSales.forEach((_, index) => {
-            this.calculateSales(index);
+        this.cookieSales.forEach(function (_, index) {
+            _this.calculateSales(index);
         });
         // Update the overall totals only when saving
         this.updateTotals();
         console.log('Saving changes:', this.cookieSales);
-    }
-}
+    };
+    return CookieSalesManager;
+}());
 // Initialize the manager when the DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function () {
     new CookieSalesManager();
 });

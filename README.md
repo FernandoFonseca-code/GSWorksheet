@@ -3,3 +3,5 @@ This repository is a preliminary project that I created to help our troop with c
 
 ## Live Website
 Check out the live website hosted by [GitHub Pages](https://fernandofonseca-code.github.io/GSWorksheet/)
+
+![HomePage](Home_Page_Image.png)
